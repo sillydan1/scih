@@ -8,4 +8,37 @@ version = "0.1.0"
 description = "Simple CI webhooks integration extension"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "fastapi[standard]",
+    "uvicorn"
+]
+
+[project.optional-dependencies]
+build = [
+    "build"
+]
+dev = [
+    "scih[build]",
+    "ruff",
+    "basedpyright",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "I"
+]
+
+[tool.ruff.format]
+indent-style = "space"
+docstring-code-format = true
+
+[tool.basedpyright]
+include = ["src"]
+reportAny = false  # NOTE: only needed because `argparse` outputs `Any` types.
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
