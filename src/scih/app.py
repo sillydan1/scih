@@ -1,4 +1,4 @@
-"""Main scih module."""
+"""Primary app module."""
 
 """
  scih - Simple CI webhooks integration extension
@@ -17,13 +17,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from argparse import ArgumentParser, Namespace
+from fastapi import FastAPI
 
-import uvicorn
-
-from scih.app import app
-
-
-def main() -> None:
-    """Main entrypoint."""
-    print("Hello World!")
+app = FastAPI()
