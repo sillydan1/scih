@@ -41,4 +41,5 @@ def parse_arguments() -> Namespace:
     parser = ArgumentParser(description="Simple CI webhooks api service")
     _ = parser.add_argument("--port", type=int, default=8000, help="Port to run the server on.")
     _ = parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to run the server on.")
+    _ = parser.add_argument("--sci-conf-file", "-C", type=str, default="/etc/", help="dhjkwahdjkwah")  # BOOKMARK: here
     return parser.parse_args()

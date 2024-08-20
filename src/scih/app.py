@@ -17,6 +17,23 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from importlib import metadata
+
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(
+    title="SCI-Hooks",
+    description="Simple CI webhooks api service",
+    version=metadata.version("scih"),
+    contact={
+        "name": "Asger Gitz-Johansen",
+        "url": "https://git.gtz.dk/agj/scih",
+    },
+    license_info={
+        "name": "GPLv3",
+        "url": "https://www.gnu.org/licenses/",
+    },
+    openapi_url="/openapi.json",
+    docs_url="/docs",
+    redoc_url=None,
+)
