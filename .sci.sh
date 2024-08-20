@@ -11,5 +11,8 @@ python3 -m ruff check
 python3 -m ruff format --check --diff
 python3 -m basedpyright
 
+echo "testing..."
+python3 -m pytest
+
 echo "building package..."
 python3 -m build --outdir build/dist

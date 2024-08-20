@@ -37,3 +37,13 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url=None,
 )
+
+
+def get_sci_hooks() -> dict[str, str]:
+    """The a mapping of pipeline names to sci hook files.
+
+    Returns:
+        A mapping from the pipeline name to the hook file.
+
+    """
+    raise NotImplementedError("Not implemented, check dependency injection")

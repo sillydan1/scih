@@ -17,17 +17,23 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser
+from argparse import Namespace
 
 import uvicorn
 
 from scih.app import app
+from scih.app import get_sci_hooks
 
 
 def main() -> None:
     """Main entrypoint."""
     args = parse_arguments()
-    # TODO: inject dependencies (using app.dependency_overrides[func_name])
+
+    def get_sci_hooks_from_conf(args: Namespace=args) -> dict[str, str]:
+        return {}
+
+    app.dependency_overrides[get_sci_hooks] = get_sci_hooks_from_conf
     uvicorn.run(app, host=args.host, port=args.port)
 
 
@@ -41,5 +47,7 @@ def parse_arguments() -> Namespace:
     parser = ArgumentParser(description="Simple CI webhooks api service")
     _ = parser.add_argument("--port", type=int, default=8000, help="Port to run the server on.")
     _ = parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to run the server on.")
-    _ = parser.add_argument("--sci-conf-file", "-C", type=str, default="/etc/", help="dhjkwahdjkwah")  # BOOKMARK: here
+    _ = parser.add_argument(
+        "--sci-conf-file", "-C", type=str, default="/etc/sci/pipelines.conf", help="sci pipelines configuration file."
+    )
     return parser.parse_args()

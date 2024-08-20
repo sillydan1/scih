@@ -17,8 +17,12 @@ dependencies = [
 build = [
     "build"
 ]
+test = [
+    "pytest"
+]
 dev = [
     "scih[build]",
+    "scih[test]",
     "ruff",
     "basedpyright",
 ]
@@ -31,13 +35,16 @@ select = [
     "I"
 ]
 
+[tool.ruff.lint.isort]
+force-single-line = true
+
 [tool.ruff.format]
 indent-style = "space"
 docstring-code-format = true
 
 [tool.basedpyright]
 include = ["src"]
-reportAny = false  # NOTE: only needed because `argparse` outputs `Any` types.
+reportAny = false
 reportMissingImports = "error"
 reportMissingTypeStubs = false
 pythonVersion = "3.12"
