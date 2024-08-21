@@ -37,6 +37,16 @@ def main() -> None:
     uvicorn.run(app, host=args.host, port=args.port)
 
 
+def read_config_file(filepath: str) -> dict[str, str]:
+    result: dict[str, str] = {}
+    with open(filepath, "r") as f:
+        lines = f.readlines()
+    for line in lines:
+        line = line.strip()
+        pass # TODO: interpret the line
+    return result
+
+
 def parse_arguments() -> Namespace:
     """Parse the commandline arguments.
 

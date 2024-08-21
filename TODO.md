@@ -1,8 +1,8 @@
 ## Things to do
- - [ ] Set up a python project
+ - [x] Set up a python project
        Use a modern, and quite strict tootchain
- - [ ] Create a simple FastAPI hello-world api
- - [ ] Set up POST access for gitea
+ - [x] Create a simple FastAPI hello-world api
+ - [x] Set up POST access for gitea
  - [ ] Experiment using a unit test and example data
  - [ ] Authorization & Authentication
  - [ ] Set up experiment on gtz
