@@ -24,14 +24,16 @@ import uvicorn
 
 from scih.app import app
 from scih.app import get_sci_hooks
+from scih.hooks import *
 
 
 def main() -> None:
     """Main entrypoint."""
     args = parse_arguments()
 
-    def get_sci_hooks_from_conf(args: Namespace=args) -> dict[str, str]:
-        return {}
+    conf = read_config_file(args.sci_conf_file)
+    def get_sci_hooks_from_conf(conf: dict[str, str] = conf) -> dict[str, str]:
+        return conf
 
     app.dependency_overrides[get_sci_hooks] = get_sci_hooks_from_conf
     uvicorn.run(app, host=args.host, port=args.port)
@@ -43,7 +45,7 @@ def read_config_file(filepath: str) -> dict[str, str]:
         lines = f.readlines()
     for line in lines:
         line = line.strip()
-        pass # TODO: interpret the line
+        pass  # TODO: interpret the line
     return result
 
 

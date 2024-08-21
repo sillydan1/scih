@@ -18,7 +18,8 @@ build = [
     "build"
 ]
 test = [
-    "pytest"
+    "pytest",
+    "coverage"
 ]
 dev = [
     "scih[build]",
