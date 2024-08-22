@@ -28,13 +28,14 @@ async def gitea(
     if x_gitea_event is None:
         warning("did not receive the X-Gitea-Event request header - proceeding with being ambiguous")
         raise HTTPException(status_code=400)
-    info(f"got gitea event: {x_gitea_event}")
+    info(f"got gitea event: '{x_gitea_event}' for repo: '{body.repository.name}'")
     if name not in sci_hooks:
         raise HTTPException(status_code=404, detail="no such hook found")
     if not exists(sci_hooks[name]):
         raise HTTPException(status_code=500, detail="could not find hook-file")
     # TODO: Authorization (using ssh keys or something?)
     _ = run(f"touch {sci_hooks[name]}", check=True, shell=True)
+
 
 # @app.post("/hooks/github/{name}", description="post a github flavored hook")
 # async def github(name: str, sci_hooks: Annotated[dict[str, str], Depends(get_sci_hooks)]):

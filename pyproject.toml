@@ -13,6 +13,9 @@ dependencies = [
     "uvicorn"
 ]
 
+[project.scripts]
+scih = "scih.main:main"
+
 [project.optional-dependencies]
 build = [
     "build"

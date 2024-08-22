@@ -19,6 +19,7 @@
 """
 from argparse import ArgumentParser
 from argparse import Namespace
+from os.path import exists
 
 import uvicorn
 
@@ -30,12 +31,10 @@ from scih.hooks import *
 def main() -> None:
     """Main entrypoint."""
     args = parse_arguments()
-
+    if args is None:
+        return
     conf = read_config_file(args.sci_conf_file)
-    def get_sci_hooks_from_conf(conf: dict[str, str] = conf) -> dict[str, str]:
-        return conf
-
-    app.dependency_overrides[get_sci_hooks] = get_sci_hooks_from_conf
+    app.dependency_overrides[get_sci_hooks] = lambda: conf
     uvicorn.run(app, host=args.host, port=args.port)
 
 
@@ -49,7 +48,7 @@ def read_config_file(filepath: str) -> dict[str, str]:
     return result
 
 
-def parse_arguments() -> Namespace:
+def parse_arguments() -> Namespace | None:
     """Parse the commandline arguments.
 
     Returns:
@@ -62,4 +61,9 @@ def parse_arguments() -> Namespace:
     _ = parser.add_argument(
         "--sci-conf-file", "-C", type=str, default="/etc/sci/pipelines.conf", help="sci pipelines configuration file."
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not exists(args.sci_conf_file):
+        print(f"ERROR: no such file exists: {args.sci_conf_file}")
+        parser.print_help()
+        return None
+    return args
