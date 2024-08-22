@@ -3,7 +3,7 @@
        Use a modern, and quite strict tootchain
  - [x] Create a simple FastAPI hello-world api
  - [x] Set up POST access for gitea
- - [ ] Experiment using a unit test and example data
+ - [x] Experiment using a unit test and example data
  - [ ] Authorization & Authentication
  - [ ] Set up experiment on gtz
  - [ ] Get github webhooks to work
