@@ -12,6 +12,6 @@ class SciPipeline(NamedTuple):
     @staticmethod
     def from_strings(input: list[str]) -> "SciPipeline | None":
         if len(input) != 4:
-            logger.error("input was not 4 strings")
+            logger.opt(colors=True).error(f'input <yellow>{input}</yellow> was not 4 strings')
             return None
         return SciPipeline(name=input[0], url=input[1], trigger=input[2], script=input[3])

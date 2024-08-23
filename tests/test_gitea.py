@@ -1,3 +1,4 @@
+import re
 from json import loads
 from subprocess import run
 
@@ -20,3 +21,9 @@ def test_post_gitea_hook_accept(
         assert response.status_code == 200, response.json()
         after = get_file_mtime_ms(sci_conf[key])
         assert after > before
+
+def test_hest() -> None:
+    test_str = 'a b c "d e f"'
+    pattern = re.compile(r'"[^"]*"|\S+')
+    found = pattern.findall(test_str)
+    assert len(found) == 4

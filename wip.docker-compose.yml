@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  sci:
+    image: git.gtz.dk/agj/sci:latest
+    container_name: sci
+    volumes:
+      - sci-config:/etc/sci/config
+      - sci-data:/var/log/sci
+    environment:
+      - USER_UID=1000
+    networks:
+      - proxy
+    command: "-f /etc/sci/config/pipelines.conf -L /var/log/sci/"
+
+  scih:
+    image: git.gtz.dk/agj/scih:latest
+    container_name: scih
+    volumes:
+      - sci-config:/usr/etc/sci/config
+      - sci-data:/var/log/sci
+    networks:
+      - proxy
+    expose:
+      - 8000
+    command: "-c /ect/sci/config/pipelines.conf -v DEBUG"  # TODO: revert to INFO / default verbosity when done testing
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.scih.rule=Host(`scih.gtz.dk`)"
+      - "traefik.http.routers.scih.entrypoints=websecure"
+      - "traefik.http.routers.scih.service=scih"
+      - "traefik.http.routers.scih.tls=true"
+      - "traefik.http.routers.scih.tls.certresolver=letsencrypt"
+      - "traefik.http.services.scih.loadbalancer.server.port=8000"
+
+volumes:
+  sci-config:
+  sci-data:
+    external: true

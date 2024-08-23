@@ -35,7 +35,7 @@ class CachedConfReader:
             filepath: Filepath to the configuration file.
 
         """
-        self._pattern = re.compile(r'\S+|"[^"]*"')
+        self._pattern = re.compile(r'"[^"]*"|\S+')
         self._config: dict[str, str] | None = None
         self._filepath: str = filepath
         self._last_time_changed: float = 0
@@ -70,4 +70,6 @@ class CachedConfReader:
                     f"loaded pipeline <light-blue>{pipeline.name}</light-blue> [<yellow>{pipeline.trigger}</yellow>]"
                 )
                 result[pipeline.trigger] = f"/tmp/sci/{pipeline.trigger}"
+            else:
+                logger.error("could not parse pipeline")
         return result

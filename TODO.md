@@ -4,6 +4,10 @@
  - [x] Create a simple FastAPI hello-world api
  - [x] Set up POST access for gitea
  - [x] Experiment using a unit test and example data
+ - [ ] Experiment in a real deployment
+    - [x] Containerize `scih` (easy)
+    - [ ] `sci` secrets!
+    - [ ] Containerize `sci`
  - [ ] Authorization & Authentication
  - [ ] Set up experiment on gtz
  - [ ] Get github webhooks to work
