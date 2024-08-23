@@ -5,3 +5,4 @@ build/
 **/__pycache__
 uv.lock
 .coverage
+.pytest_cache/

@@ -42,6 +42,7 @@ async def gitea(
     x_gitea_delivery: Annotated[str | None, Header()] = None,
     x_gitea_event: Annotated[str | None, Header()] = None,
 ) -> None:
+    logger.opt(colors=True).debug(body)
     # TODO: Authentication (using secrets?)
     if x_gitea_delivery is None:
         logger.opt(colors=True).warning("did not receive the <red>X-Gitea-Delivery</red> request header")
@@ -55,7 +56,7 @@ async def gitea(
     if not exists(sci_hooks[name]):
         logger.opt(colors=True).error(f"could not find hook-file for: <light-blue>{name}</light-blue>")
         raise HTTPException(status_code=500, detail="could not find hook-file")
-    logger.opt(colors=True).info(
+    logger.opt(colors=True).success(
         f"gitea: <yellow>{x_gitea_event}</yellow>, hook: <light-blue>{name}</light-blue>, repo: <green>{body.repository.name}</green>"
     )
     # TODO: Authorization (using ssh keys or something?)

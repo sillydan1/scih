@@ -12,6 +12,4 @@
  - [ ] Get gitlab webhooks to work
     - [ ] unit test
     - [ ] real-world deployment
-
-## Bugs
-
+ - [x] automaticly update when the pipelines.conf changes

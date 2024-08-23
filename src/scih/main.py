@@ -17,7 +17,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import re
 from argparse import ArgumentParser
 from argparse import Namespace
 from os import environ
@@ -29,7 +28,7 @@ from loguru import logger
 
 from scih.app import app
 from scih.app import get_sci_hooks
-from scih.config.sci_config_loader import SciPipeline
+from scih.config.cached_conf_reader import CachedConfReader
 from scih.hooks import *
 
 
@@ -41,8 +40,8 @@ def main() -> None:
         return
     use_colors: bool = not bool(environ.get("NO_COLOR", ""))
     setup_logging(args.verbosity, use_colors)
-    conf = read_config_file(args.sci_conf_file)
-    app.dependency_overrides[get_sci_hooks] = lambda: conf
+    conf_loader = CachedConfReader(args.sci_conf_file)
+    app.dependency_overrides[get_sci_hooks] = lambda: conf_loader.config
     uvicorn.run(app, host=args.host, port=args.port, use_colors=use_colors)
 
 
@@ -56,30 +55,6 @@ def setup_logging(level: str, use_colors: bool) -> None:
     )
 
 
-def read_config_file(filepath: str) -> dict[str, str]:
-    """Read the sci configuration file and provide a trigger-name to trigger-file mapping.
-
-    Args:
-        filepath: Filepath relative cwd (or full) to the sci configuration file.
-
-    Returns:
-        A mapping from trigger-names to trigger-files.
-
-    """
-    result: dict[str, str] = {}
-    pattern = re.compile(r'\S+|"[^"]*"')
-    with open(filepath, "r") as f:
-        lines = f.readlines()
-    for line in lines:
-        pipeline = SciPipeline.from_strings(pattern.findall(line.strip()))
-        if pipeline is not None:
-            logger.opt(colors=True).info(
-                f"loaded pipeline <light-blue>{pipeline.name}</light-blue> [<yellow>{pipeline.trigger}</yellow>]"
-            )
-            result[pipeline.trigger] = f"/tmp/sci/{pipeline.trigger}"
-    return result
-
-
 def parse_arguments() -> Namespace | None:
     """Parse the commandline arguments.
 
@@ -90,7 +65,14 @@ def parse_arguments() -> Namespace | None:
     parser = ArgumentParser(description="Simple CI webhooks api service")
     _ = parser.add_argument("--port", "-P", type=int, default=8000, help="Port to run the server on.")
     _ = parser.add_argument("--host", "-H", type=str, default="0.0.0.0", help="Host to run the server on.")
-    _ = parser.add_argument("--verbosity", "-v", type=str, default="WARN", help="Set verbosity level.")
+    _ = parser.add_argument(
+        "--verbosity",
+        "-v",
+        type=str,
+        default="SUCCESS",
+        help="Set verbosity level.",
+        choices=["TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"],
+    )
     _ = parser.add_argument(
         "--sci-conf-file", "-c", type=str, default="/etc/sci/pipelines.conf", help="Sci pipelines configuration file."
     )
